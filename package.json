@@ -18,7 +18,9 @@
   "homepage": "https://github.com/juhlio/video-maker#readme",
   "dependencies": {
     "algorithmia": "^0.3.10",
+    "ibm-watson": "^6.2.1",
     "readline-sync": "^1.4.10",
-    "sbd": "^1.0.19"
+    "sbd": "^1.0.19",
+    "watson-developer-cloud": "^4.0.1"
   }
 }
