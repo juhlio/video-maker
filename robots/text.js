@@ -7,22 +7,28 @@ const watsonApiKey = require('../credentials/watson-nlu.json')
 
 const NaturalLanguageUnderstandingV1 = require('ibm-watson/natural-language-understanding/v1');
 
-var nlu = new NaturalLanguageUnderstandingV1({
+const nlu = new NaturalLanguageUnderstandingV1({
     authenticator: new IamAuthenticator({ apikey: watsonApiKey.apikey }),
     version: '2018-04-05',
     serviceUrl: watsonApiKey.url
 });
 
+const state = require('./state.js')
 
 
 
-async function robot(content) {
+
+async function robot() {
+
+    const content = state.load()
 
     await fetchContentFromWikipedia(content)
     sanitizeContent(content)
     breakContentIntoSentences(content)
     limitMaximumSentences(content)
     await fetchKeywordsofAllSentences(content)
+
+    state.save(content)
 
     async function fetchContentFromWikipedia(content) {
         const algorithmiaAuthenticaded = algorithmia(algorithmiaApiKey)
@@ -88,7 +94,6 @@ async function robot(content) {
             }).then(response => {
 
                 const keywords = response.result.keywords
-                //console.log(keywords)
                 resolve(keywords)
                 
                
