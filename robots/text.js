@@ -22,17 +22,17 @@ async function robot() {
 
     const content = state.load()
 
-    await fetchContentFromWikipedia(content)
-    sanitizeContent(content)
-    breakContentIntoSentences(content)
-    limitMaximumSentences(content)
-    await fetchKeywordsofAllSentences(content)
 
+    //await fetchContentFromWikipedia(content)
+    sanitizeContent(content.wikiPediaContent)
+    breakContentIntoSentences(content.wikiPediaContent)
+    limitMaximumSentences(content)
+    await fetchKeywordsofAllSentences(content.wikiPediaContent)
     state.save(content)
 
     async function fetchContentFromWikipedia(content) {
         const algorithmiaAuthenticaded = algorithmia(algorithmiaApiKey)
-        const wikipediaAlgorithm = algorithmiaAuthenticaded.algo('web/WikipediaParser/0.1.2?timeout=300')
+        const wikipediaAlgorithm = algorithmiaAuthenticaded.algo('web/WikipediaParser/0.1.2')
         const wikipediaResponse = await wikipediaAlgorithm.pipe(content.searchTerm)
         const wikipediaContent = wikipediaResponse.get()
 
@@ -40,10 +40,11 @@ async function robot() {
     }
 
     function sanitizeContent(content) {
-        const withoutBlankLinesAndMarkdown = removeBlankLinesAndMarkdown(content.sourceContentOriginal)
+        const withoutBlankLinesAndMarkdown = removeBlankLinesAndMarkdown(content.content)
         const withoutDatesInParenteses = removeDatesInParenteses(withoutBlankLinesAndMarkdown)
 
-        content.sourceContentSanitized = withoutDatesInParenteses
+        content.content = withoutDatesInParenteses
+        
 
         function removeBlankLinesAndMarkdown(text) {
             const allLines = text.split('\n')
@@ -62,11 +63,11 @@ async function robot() {
         }
 
     }
-    function breakContentIntoSentences() {
+    function breakContentIntoSentences(content) {
         content.sentences = []
 
-        const sentences = sentenceBoundaryDetection.sentences(content.sourceContentSanitized)
-
+        const sentences = sentenceBoundaryDetection.sentences(content.content)
+        
         sentences.forEach((sentence) => {
             content.sentences.push({
                 text: sentence,
@@ -77,10 +78,10 @@ async function robot() {
     }
 
     function limitMaximumSentences(content) {
-        content.sentences = content.sentences.slice(0, content.maximumSentences)
+        content.wikiPediaContent.sentences = content.wikiPediaContent.sentences.slice(0, content.maximumSentences)
     }
 
- 
+
 
 
     async function fetchWatsonAndReturnKeywords(sentence) {
@@ -95,8 +96,8 @@ async function robot() {
 
                 const keywords = response.result.keywords
                 resolve(keywords)
-                
-               
+
+
 
 
             })
@@ -104,19 +105,19 @@ async function robot() {
                     console.log('error: ', err);
                     reject()
                 });
-            
+
         })
     }
 
-       async function fetchKeywordsofAllSentences(content) {
+    async function fetchKeywordsofAllSentences(content) {
         for (const sentence of content.sentences) {
 
-            //sentence.keywords = await fetchWatsonAndReturnKeywords(sentence.text)
+
             let palavraChaves = await fetchWatsonAndReturnKeywords(sentence.text)
-            palavraChaves = palavraChaves.map( (palavraChave) => {return palavraChave.text})
-           
+            palavraChaves = palavraChaves.map((palavraChave) => { return palavraChave.text })
+
             sentence.keywords = palavraChaves
-            
+
 
         }
     }

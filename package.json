@@ -22,6 +22,9 @@
     "ibm-watson": "^6.2.1",
     "readline-sync": "^1.4.10",
     "sbd": "^1.0.19",
-    "watson-developer-cloud": "^4.0.1"
+    "superagent": "^6.1.0",
+    "unicode": "^13.0.0",
+    "unidecode": "^0.1.8",
+    "watson-developer-cloud": "^4.0.0"
   }
 }
