@@ -4,7 +4,8 @@ const robots = {
     wikipedia: require('./robots/wikipedia.js'),
     text: require('./robots/text.js'),
     state: require('./robots/state.js'),
-    
+    image: require('./robots/image.js'),
+
 }
 
 async function start() {
@@ -14,9 +15,10 @@ async function start() {
     content.wikiPediaContent = await robots.wikipedia(content)
     robots.state.save(content)
     await robots.text()
-    
-   const content2 = robots.state.load()
-   console.dir(content2, {depth: null})
+    await robots.image()
+
+    const content2 = robots.state.load()
+    console.dir(content2, { depth: null })
 
 }
 
