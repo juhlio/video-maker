@@ -17,8 +17,8 @@ async function start() {
     await robots.text()
     await robots.image()
 
-    const content2 = robots.state.load()
-    console.dir(content2, { depth: null })
+    //const content2 = robots.state.load()
+    //console.dir(content2, { depth: null })
 
 }
 

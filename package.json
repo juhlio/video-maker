@@ -21,6 +21,7 @@
     "fs": "0.0.1-security",
     "googleapis": "^88.2.0",
     "ibm-watson": "^6.2.1",
+    "image-downloader": "^4.0.3",
     "readline-sync": "^1.4.10",
     "sbd": "^1.0.19",
     "superagent": "^6.1.0",
