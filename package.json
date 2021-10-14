@@ -19,6 +19,7 @@
   "dependencies": {
     "algorithmia": "^0.3.10",
     "fs": "0.0.1-security",
+    "googleapis": "^88.2.0",
     "ibm-watson": "^6.2.1",
     "readline-sync": "^1.4.10",
     "sbd": "^1.0.19",
